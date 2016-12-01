@@ -1,0 +1,469 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "1.110.0"
+
+default_platform :ios
+
+platform :ios do
+
+    ENV['FL_AUTOMATION_TEMPLATE'] = '/Applications/Xcode.app/Contents/Applications/Instruments.app/Contents/PlugIns/AutomationInstrument.xrplugin/Contents/Resources/Automation.tracetemplate'
+
+  before_all do
+
+    # ENV['FASTLANE_EXPERIMENTAL_TRANSPORTER_AVOID_SHELL_SCRIPT'] = '1'
+    # ENV['SPACESHIP_LOGIN_ENCODING_IDENTITY'] = '1'
+    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+    #kuduRoutine ignore file 被玩坏了，保存了platform的东西，需要将这些delete 掉再重新上传，并更新gitignore 才能生效。所以
+    #执行ensure_git_status_clean 会一直显示想要忽略的问题。
+
+   #ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
+
+   # ensure_git_status_clean
+
+   #执行此句增加最小的单位，0.7.0 会变成0.7.1 对于cordova 项目一般不需要，因为执行gulp build  自动生成已经配置的项目了。
+   # increment_version_number
+  #  increment_version_number(
+  # bump_type: "patch" # Automatically increment patch version number
+  # )
+  #  increment_version_number(
+  # bump_type: "minor" # Automatically increment minor version number
+  # )
+  #  increment_version_number(
+  # bump_type: "major" # Automatically increment major version number
+  # )
+  #  increment_version_number(
+  # version_number: "2.1.1" # Set a specific version number
+  # )
+# #文件操作
+#     readme = File.read("../docs/CHANGELOG.md")
+#   latest_version = readme.split("\n## ").first
+#   first_line = latest_version.split("\n").first
+#   version_number = first_line.split(" ")[1]
+# cocoapods
+  end
+
+
+  desc "Runs all the tests"
+  lane :test do
+    scan(skip_slack: true)
+  end
+
+  desc "Submit a new Beta Build to Apple TestFlight"
+  desc "This will also make sure the profile is up to date"
+  lane :beta do
+    # match(type: "appstore") # more information: https://codesigning.guide
+    gym # Build your app - more options available
+    pilot
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here (run `fastlane actions`)
+  end
+
+
+#set_info_plist_value(path: "./Info.plist", key: "CFBundleIdentifier", value: #”com.krausefx.app.beta")
+
+
+desc "Install pod dependencies"
+  lane :install_pods do
+    cocoapods
+  end
+
+desc "run simulator"
+  lane :simulator do
+    xcodebuild(
+      scheme: "KuduRoutines",
+      configuration: "Debug",
+      sdk: 'iphonesimulator10.1',
+      destination: 'platform=iOS Simulator,OS=10.1,name=iPhone 6',
+      analyze: true
+    )
+  end
+
+desc "Deploy a new version to the App Store"
+lane :release do
+    # match(type: "appstore")
+    # snapshot
+
+
+    # buildIPA
+
+    # deliver(
+    #   skip_deploy: true,
+    #   force: true
+    # )
+
+    # commit_version_bump(
+    #   message: 'Version Bump by fastlane',
+    #   force: true
+    # )
+
+    # build_number = Actions.lane_context[Actions::SharedValues::BUILD_NUMBER]
+    # add_git_tag(tag: "appstore-#{build_number}")
+    # push_to_git_remote
+  end
+
+
+ #如果有TestProject 则运行  lane :test do
+    # xctest(
+    #   workspace: './KuduRoutine.xcworkspace',
+    #   scheme: 'Debug',
+    #   sdk: 'iphonesimulator',
+    #   destination: "name=iPhone 5"
+    # )
+
+
+    desc "UI automation test"
+  lane :do_monkey_test do |options|
+    times              = options[:times] || 2
+    scheme             = options[:scheme]
+    project            = options[:project]
+    device_udid        = options[:device_udid]
+    device_type        = options[:device_type]
+    script             = options[:script]
+    report_output_path = options[:report_output_path]
+
+
+    git_pull
+    # cocoapods
+    xcodebuild(scheme: scheme, arch: 'x86_64', sdk: 'iphonesimulator10.1', configuration: 'Debug')
+    app_path = get_debug_app_path(scheme: scheme, project: project)
+    (1..times.to_i).each do |i|
+      install_app_on_simulator(device_type: device_type, app_path: app_path) # 使用ios-sim命令安装app到模拟器，如果是真机的话，则使用ios-deploy
+      sleep(30)
+      instruments_ui_automation(device: device_udid, app_path: app_path, report_output_path: report_output_path, script:script)
+    end
+
+  end
+
+
+  lane :buildIPA do
+
+# 有options 参数 一直不明白options 怎么来的原来需要外面传入。
+#     fastlane buildIPA project:GMUtil version:0.1.4
+
+
+
+# identifier = get_info_plist_value(path: "./Info.plist", key: "CFBundleIdentifier")
+
+    #development
+    # match(app_identifier: "com.nextxnow.kuduroutines", type: "development")
+
+    # Download the provisioning profile for the app
+    # sigh(output_path: "./fastlane/profiles") # Distribution Profile
+
+    # Download the provisioning profile
+    # sigh(
+    #   output_path: "./fastlane/profiles",
+    #   app_identifier: "com.nextxnow.kuduroutines"
+    # )
+    #   sigh(
+    #   adhoc: true,
+    #   # Fastlane has issues forcing AdHoc profiles
+    #   force: false
+    # )
+    # Helper.log.info "Update English files on CrowdIn"
+
+    build_name = "CITest_v#{get_version_number}"
+
+    gym(
+      configuration: "Release",
+      scheme: "CITest",
+      include_bitcode: false,
+      silent: true,
+      clean: true,
+      output_directory: "~/Documents/buildIPA/",
+      output_name: "#{build_name}.ipa",
+      # export_method:"ad-hoc,enterprise,appstore,development"
+      # include_symbols: true,
+      # sdk: "iphoneos10.1",
+      export_method:"development",
+      use_legacy_build_api: true
+      )
+  end
+
+
+desc "This action does the following:"
+desc "- Ensures a clean git status"
+desc "- Increment the build number"
+desc "- Build and sign the app"
+desc "- Upload the ipa file to remote"
+desc "- Post a message to slack containing the download link"
+desc "- Commit and push the version bump"
+
+desc "test shell command"
+
+# ensure_git_branch(
+#   branch: 'develop'
+# )
+  lane :autobuild do
+
+        #默认路径不是iOS 文件夹而是fastlane 文件夹。
+        # puts Dir.pwd.split("/")[5]
+        # puts Dir.pwd.split("/")[-2].to_i
+        # puts sh("cd ../;ls -l")
+        # sh("bundle exec ../lib/scripts/app_code_sync")
+
+
+
+       buildIPA
+        # match(app_identifier: "com.nextxnow.kuduroutines", type: "development")
+        # puts change_log_since_last_tag
+        # puts changelog_from_git_commits
+
+    # if is_ci?
+    #   puts "I'm a computer"
+    # else
+    #   say "Hi Human!"
+    # end
+    #没有测试project 会报xcodebuild: error: Scheme KuduRoutines is not currently configured for the test action.
+    #scan 这条命令cordova 项目没有意义。
+    # scan(skip_slack: true)
+
+    # git_pull
+    # sh("gulp build")
+    # # puts `gulp build`
+    # buildIPA
+
+
+  # Make sure our directory is clean, except for changes Fastlane has made
+  # clean_build_artifacts
+
+  # # Tag release and push to GitHub
+  # commit_version_bump message: "Deploying version #{version_number}."
+  # add_git_tag tag: version_number
+  # push_to_git_remote
+    # sh("../scripts/localise.sh")
+    #git_push(branch: "restaurant-config")
+
+
+  # sh "cd .. ; bundle exec sbconstants Kiosk/Storyboards/StoryboardIdentifiers.swift --source-dir Kiosk/Storyboards --swift"
+
+  end
+
+
+
+  desc 'Deploy a new version to the App Store'
+  lane :do_deliver_app do |options|
+    app_identifier   = options[:app_identifier]
+    project          = options[:project]
+    scheme           = options[:scheme]
+    version          = options[:version]
+    build            = options[:build] || Time.now.strftime('%Y%m%d%H%M')
+    output_directory = options[:output_directory]
+    output_name      = options[:output_name]
+
+
+    git_pull
+
+    hipchat(message: "Pod install")
+    cocoapods
+
+    cert(username: ENV["FASTLANE_USER"])
+    sigh(force: true, username: ENV["FASTLANE_USER"], app_identifier: app_identifier)
+
+    hipchat(message: "Update build number to #{build} and building ipa")
+    update_build_number(version: build, plist: "#{project}/Info.plist")
+    gym(scheme: options[:scheme], clean: true, output_directory: output_directory, output_name: output_name)
+
+    hipchat(message: 'deliver to itunesconnect')
+    deliver(force: false, skip_screenshots: true, skip_metadata: true)
+
+    hipchat(message: "Upload #{project} to itunesconnect successfully!")
+
+    git_add(path: '.')
+    git_commit(path: '.', message: "update build number to #{build} and upload to itunesconnect")
+    git_pull
+    git_push(branch: "test")
+  end
+
+def project_base_path
+    File.expand_path("..", Dir.pwd)
+end
+
+
+desc "Returns a default changelog."
+  lane :default_changelog do
+    changelog = changelog_from_git_commits(
+        between: [ENV['GIT_PREVIOUS_SUCCESSFUL_COMMIT'] || "HEAD^^^^^", "HEAD"],
+        pretty: "- %s"
+    )
+    # HAX: strip emoji from changelog
+    changelog = changelog.sub(/[\u{1F300}-\u{1F6FF}]/, '')
+    Actions.lane_context[SharedValues::FL_CHANGELOG] = changelog
+    puts changelog
+    changelog
+  end
+
+#beta版打tag
+   desc "Increment the app's beta build number, add a tag, and push to the beta branch."
+  lane :bumpAndTagBeta do |options|
+    sh "git fetch"
+    sh "git checkout develop"
+    sh "git pull"
+    sh "git checkout beta"
+    sh "git merge develop"
+
+    increment_build_number
+
+    new_version = get_version_number
+    commit_version_bump
+    push_to_git_remote(
+       local_branch: 'beta',  # optional, aliased by 'branch', default: 'master'
+       remote_branch: 'beta', # optional, default is set to local_branch
+    )
+
+    tag_name = "betas/#{new_version}"
+    add_git_tag(tag: tag_name)
+    sh "git push origin --tags"
+
+  end
+
+#发布版打tag
+desc "Increment the app's build number, add a tag, and push to the master branch."
+  lane :bumpAndTagRelease do |options|
+    sh "git fetch"
+    sh "git checkout release"
+    sh "git pull"
+    sh "git checkout master"
+    sh "git merge release"
+
+    increment_build_number(build_number: get_release_build_number)
+
+    new_version = get_version_number
+    commit_version_bump
+    push_to_git_remote(
+       local_branch: 'master',  # optional, aliased by 'branch', default: 'master'
+       remote_branch: 'master', # optional, default is set to local_branch
+    )
+
+    tag_name = "releases/#{new_version}"
+    add_git_tag(tag: tag_name)
+    sh "git push origin --tags"
+
+  end
+
+
+  # You can define as many lanes as you want
+
+  after_all do |lane|
+
+    # push_git_tags
+    #reset_git_repo(force: true)
+
+    #File.delete("../../Fitbay.ipa")
+
+      # Make sure our directory is clean, except for changes Fastlane has made
+
+    # clean_build_artifacts(
+    #   exclude_pattern: ".*\.mobileprovision" # don't clear provisioning profiles, as we store them in git
+    # )
+
+
+# 由于修改了版本号，所以需要将代码Commit和Push一下
+
+
+    # Commit new build and push to git
+    # git_commit
+    # push_to_git_remote
+
+  #     ship_it
+  # notify("Lane #{lane} completed successfully!")
+
+    # This block is called, only if the executed lane was successful
+
+    # slack(
+    #   message: "Successfully deployed new App Update."
+    # )
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+        # reset_git_repo(force: true)
+
+      notify "Fastlane '#{lane}' errored" # Mac OS X Notification
+
+  end
+end
+
+
+def change_log_since_last_tag
+    # http://git-scm.com/docs/pretty-formats
+    # <short hash> <commit title>
+    return changelog_from_git_commits(pretty: '%h %s')
+end
+
+def next_version
+  Time.now.strftime("%Y%m%d%H%M")
+end
+
+def get_DisplayName
+  `/usr/libexec/PlistBuddy -c 'Print CFBundleDisplayName' ../KuduRoutines/KuduRoutines-Info.plist`.strip
+end
+
+def compare_url
+  last_bump_hash = sh("git log --pretty=format:'%s %h' | grep -i '^version bump [0-9]\\{12\\}\\b' | awk '{print $NF}' | head -n1").strip
+  current_hash = sh("git rev-parse HEAD").strip
+
+  "https://github.com/timehop/TimehopThree-iOS/compare/#{last_bump_hash}...#{current_hash}"
+end
+
+ def tag_name(build_type, version_number, build_number)
+    "#{build_type}/#{version_number}/#{build_number}"
+end
+
+def ship_it
+  rand = Random.rand(0..1)
+  if rand == 0
+    squirrel
+  elsif rand == 1
+    boat
+  end
+end
+
+def squirrel
+  puts "
+    !!!!
+  !!!!!!!!
+!!!!!!!!!!!   O_O
+!!!  !!!!!!! /@ @\\
+      !!!!!! \\ x /
+      !!!!!!/ m  !m
+       !!!!/ __  |
+       !!!!|/  \\__
+        !!!\\______\\
+  "
+end
+
+def boat
+  puts "
+     .  o ..
+     o . o o.o
+          ...oo
+            __[]__
+         __|_o_o_o\__
+         \\\"\"\"\"\"\"\"\"\"\"/
+          \\. ..  . /
+     ^^^^^^^^^^^^^^^^^^^^
+  "
+end
+
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
+
+# fastlane reports which actions are used
+# No personal data is recorded. Learn more at https://github.com/fastlane/enhancer
