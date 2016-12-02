@@ -168,12 +168,12 @@ lane :release do
     #   app_identifier: "com.nextxnow.kuduroutines"
     # )
 
-    #cert(username: ENV["FASTLANE_USER"])
+    cert(username: ENV["FASTLANE_USER"])
 
       sigh(
       adhoc: true,
       force: true,
-      #username: ENV["FASTLANE_USER"],
+      username: ENV["FASTLANE_USER"],
       app_identifier:"com.geasscode.CITest"
     )
     # Helper.log.info "Update English files on CrowdIn"
