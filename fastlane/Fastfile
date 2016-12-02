@@ -167,13 +167,14 @@ lane :release do
     #   output_path: "./fastlane/profiles",
     #   app_identifier: "com.nextxnow.kuduroutines"
     # )
+     match(app_identifier: "com.geasscode.CITest", type: "adhoc")
 
-    cert(username: ENV["FASTLANE_USER"])
+    #cert(username: ENV["FASTLANE_USER"])
 
       sigh(
       adhoc: true,
       force: true,
-      username: ENV["FASTLANE_USER"],
+      #username: ENV["FASTLANE_USER"],
       app_identifier:"com.geasscode.CITest"
     )
     # Helper.log.info "Update English files on CrowdIn"
