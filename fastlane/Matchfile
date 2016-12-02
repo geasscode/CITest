@@ -1,9 +1,9 @@
-git_url "http://gitlab.easternphoenix.com/Kudu/Kudu-Routines.git"
+git_url "https://github.com/geasscode/CITest.git"
 
-type "development" # The default type, can be: appstore, adhoc or development
+type "adhoc" # The default type, can be: appstore, adhoc or development
 
-# app_identifier ["tools.fastlane.app", "tools.fastlane.app2"]
-# username "user@fastlane.tools" # Your Apple Developer Portal username
+#app_identifier ["tools.fastlane.app", "tools.fastlane.app2"]
+ username "geasscode@outlook.com"
 
 # For all available options run `match --help`
 # Remove the # in the beginning of the line to enable the other options

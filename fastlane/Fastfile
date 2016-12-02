@@ -56,7 +56,9 @@ platform :ios do
 
   desc "Runs all the tests"
   lane :test do
-    scan(skip_slack: true)
+    #match(app_identifier: "com.geasscode.CITest", type: "adhoc",git_branch:"dev")
+
+     scan(skip_slack: true)
   end
 
   desc "Submit a new Beta Build to Apple TestFlight"
@@ -167,9 +169,9 @@ lane :release do
     #   output_path: "./fastlane/profiles",
     #   app_identifier: "com.nextxnow.kuduroutines"
     # )
-     match(app_identifier: "com.geasscode.CITest", type: "adhoc")
+     #match(app_identifier: "com.geasscode.CITest", type: "adhoc",git_branch:"dev")
 
-    #cert(username: ENV["FASTLANE_USER"])
+    cert(development: true,username: ENV["FASTLANE_USER"])
 
       sigh(
       adhoc: true,
