@@ -16,7 +16,7 @@ fastlane_version "1.110.0"
 default_platform :ios
 
 platform :ios do
-
+    ENV['FASTLANE_PASSWORD'] = 'Myload1987!'
     ENV['FL_AUTOMATION_TEMPLATE'] = '/Applications/Xcode.app/Contents/Applications/Instruments.app/Contents/PlugIns/AutomationInstrument.xrplugin/Contents/Resources/Automation.tracetemplate'
 
   before_all do
@@ -153,7 +153,6 @@ lane :release do
 
 # 有options 参数 一直不明白options 怎么来的原来需要外面传入。
 #     fastlane buildIPA project:GMUtil version:0.1.4
-
 
 
 # identifier = get_info_plist_value(path: "./Info.plist", key: "CFBundleIdentifier")
