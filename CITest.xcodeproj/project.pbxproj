@@ -436,7 +436,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.geasscode.CITest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a41f9b3e-ac1b-4074-81c4-5adeb2a71e6c";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -449,7 +449,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.geasscode.CITest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a41f9b3e-ac1b-4074-81c4-5adeb2a71e6c";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
