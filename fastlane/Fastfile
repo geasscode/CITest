@@ -393,7 +393,7 @@ desc "Increment the app's build number, add a tag, and push to the master branch
     #   success: false
     # )
         # reset_git_repo(force: true)
-    notification(subtitle: "errored", message: "Fastlane '#{lane}' errored")
+    # notification(subtitle: "errored", message: "Fastlane '#{lane}' errored")
 
   end
 end
