@@ -170,7 +170,7 @@ lane :release do
     # )
      #match(app_identifier: "com.geasscode.CITest", type: "adhoc",git_branch:"dev")
 
-    cert(development: true,username: ENV["FASTLANE_USER"])
+    cert(development: true,username: ENV["FASTLANE_USER"],keychain_password: ENV["FASTLANE_PASSWORD"])
 
       sigh(
       adhoc: true,
