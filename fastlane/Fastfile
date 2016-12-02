@@ -378,7 +378,7 @@ desc "Increment the app's build number, add a tag, and push to the master branch
     # push_to_git_remote
 
   #     ship_it
-  # notify("Lane #{lane} completed successfully!")
+  # notification("Lane #{lane} completed successfully!")
 
     # This block is called, only if the executed lane was successful
 
@@ -394,7 +394,7 @@ desc "Increment the app's build number, add a tag, and push to the master branch
     # )
         # reset_git_repo(force: true)
 
-      notify "Fastlane '#{lane}' errored" # Mac OS X Notification
+      notification "Fastlane '#{lane}' errored" # Mac OS X Notification
 
   end
 end
