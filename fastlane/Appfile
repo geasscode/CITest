@@ -1,4 +1,4 @@
-app_identifier "com.nextxnow.kuduroutines" # The bundle identifier of your app
+app_identifier "com.geass.CITest" # The bundle identifier of your app
 apple_id "geasscode@outlook.com" # Your Apple email address
 
 team_id "[[DEV_PORTAL_TEAM_ID]]"  # Developer Portal Team ID
