@@ -169,17 +169,16 @@ lane :release do
     #   app_identifier: "com.nextxnow.kuduroutines"
     # )
      #match(app_identifier: "com.geasscode.CITest", type: "adhoc",git_branch:"dev")
+     match
+    # cert(development: true,username: ENV["FASTLANE_USER"],keychain_password: ENV["FASTLANE_PASSWORD"])
 
-    cert(development: true,username: ENV["FASTLANE_USER"],keychain_password: ENV["FASTLANE_PASSWORD"])
+    #   sigh(
+    #   adhoc: true,
+    #   force: true,
+    #   #username: ENV["FASTLANE_USER"],
+    #   app_identifier:"com.geass.CITest",
 
-      sigh(
-      adhoc: true,
-      force: true,
-      #username: ENV["FASTLANE_USER"],
-      app_identifier:"com.geass.CITest",
-      output_path: "/tmp"
-
-    )
+    # )
     # Helper.log.info "Update English files on CrowdIn"
 
     build_name = "CITest_v#{get_version_number}"
