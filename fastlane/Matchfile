@@ -1,9 +1,8 @@
 git_url "https://github.com/geasscode/CITest.git"
-
 type "adhoc" # The default type, can be: appstore, adhoc or development
-
-#app_identifier ["tools.fastlane.app", "tools.fastlane.app2"]
- username "geasscode@outlook.com"
-
+app_identifier "com.geass.CITest"
+username "geasscode@outlook.com"
+git_branch "dev"
+readonly false
 # For all available options run `match --help`
 # Remove the # in the beginning of the line to enable the other options

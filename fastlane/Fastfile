@@ -58,7 +58,8 @@ platform :ios do
   lane :test do
     #match(app_identifier: "com.geasscode.CITest", type: "adhoc",git_branch:"dev")
 
-     scan(skip_slack: true)
+    match
+     #scan(skip_slack: true)
   end
 
   desc "Submit a new Beta Build to Apple TestFlight"
