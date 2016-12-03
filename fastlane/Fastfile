@@ -175,7 +175,7 @@ lane :release do
       adhoc: true,
       force: true,
       #username: ENV["FASTLANE_USER"],
-      app_identifier:"com.geasscode.CITest"
+      app_identifier:"com.geass.CITest"
     )
     # Helper.log.info "Update English files on CrowdIn"
 
